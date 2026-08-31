@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #030712;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(3, 7, 18, 0.95);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(6, 182, 212, 0.5);
+}
+
+/* Cybernetic Grid Background Animation */
+.cyber-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(6, 182, 212, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(6, 182, 212, 0.04) 1px, transparent 1px);
+  position: relative;
+}
+
+.cyber-grid::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, transparent 20%, #030712 90%);
+  pointer-events: none;
+}
+
+/* Moving Grid Lines (Matrix feel) */
+.cyber-grid-moving {
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+  animation: grid-move 20s linear infinite;
+}
+
+@keyframes grid-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+/* Glassmorphism Panels */
+.glass-panel {
+  background: rgba(11, 15, 26, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(6, 182, 212, 0.15);
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.37),
+    inset 0 0 12px rgba(6, 182, 212, 0.03);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-panel-hover:hover {
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow: 
+    0 8px 32px 0 rgba(6, 182, 212, 0.1),
+    0 0 15px rgba(6, 182, 212, 0.2),
+    inset 0 0 12px rgba(6, 182, 212, 0.05);
+  transform: translateY(-2px);
+}
+
+/* Glass Card Purple variant */
+.glass-panel-purple {
+  background: rgba(11, 15, 26, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.37),
+    inset 0 0 12px rgba(168, 85, 247, 0.03);
+}
+.glass-panel-purple-hover:hover {
+  border-color: rgba(168, 85, 247, 0.35);
+  box-shadow: 
+    0 8px 32px 0 rgba(168, 85, 247, 0.15),
+    0 0 15px rgba(168, 85, 247, 0.2),
+    inset 0 0 12px rgba(168, 85, 247, 0.05);
+  transform: translateY(-2px);
+}
+
+/* Glass Card Danger red variant */
+.glass-panel-danger {
+  background: rgba(20, 10, 10, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  box-shadow: 
+    0 8px 32px 0 rgba(239, 68, 68, 0.08),
+    inset 0 0 12px rgba(239, 68, 68, 0.04);
+}
+
+/* Glowing Neon Text */
+.text-glow-cyan {
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.6), 0 0 20px rgba(6, 182, 212, 0.3);
+}
+.text-glow-purple {
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.6), 0 0 20px rgba(168, 85, 247, 0.3);
+}
+.text-glow-red {
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.6), 0 0 20px rgba(239, 68, 68, 0.3);
+}
+
+/* Scanning Overlay Line Effect */
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.5), transparent);
+  animation: scanning 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scanning {
+  0% {
+    top: 0%;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0%;
+  }
+}
+
+/* Glitch styling for cyberpunk feel */
+.cyber-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.cyber-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 25%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: skewX(-25deg);
+  transition: 0.75s;
+}
+
+.cyber-button:hover::after {
+  left: 125%;
+}
+
+/* Custom radial background spots */
+.bg-spot-cyan {
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, transparent 70%);
+}
+.bg-spot-purple {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 75%);
+}
+.bg-spot-red {
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, transparent 70%);
+}
