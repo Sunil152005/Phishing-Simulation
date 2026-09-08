@@ -1,41 +1,136 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Base Components
+// Base Interactive Components
 import CyberGrid from './components/CyberGrid';
 import DemoController from './components/DemoController';
 
-// Perspectives & Pages
+// Standalone View Pages
 import LandingPage from './views/LandingPage';
 import AdminLogin from './views/AdminLogin';
+import UserAuth from './views/UserAuth';
 import AdminDashboard from './views/AdminDashboard';
 import CreateSimulation from './views/CreateSimulation';
 import CampaignPage from './views/CampaignPage';
 import UserBehaviour from './views/UserBehaviour';
+import TrainingConsole from './views/TrainingConsole';
+import QuizResultsAdmin from './views/QuizResultsAdmin';
+import RiskAnalysis from './views/RiskAnalysis';
+import ReportsPage from './views/ReportsPage';
+import SettingsPage from './views/SettingsPage';
 import SimulationExperience from './views/SimulationExperience';
 import AwarenessTraining from './views/AwarenessTraining';
 import QuizPage from './views/QuizPage';
 import QuizResult from './views/QuizResult';
-import RiskAnalysis from './views/RiskAnalysis';
-import ReportsPage from './views/ReportsPage';
 import UserDashboard from './views/UserDashboard';
 
-// Lucide Icons for fallback layouts
-import { BookOpen, CheckCircle, Settings, ShieldAlert, Award } from 'lucide-react';
-
+// Mock Initial Data Roster
 const INITIAL_STUDENTS = [
-  { id: 'stud-1', name: 'Vishal Sharma', email: 'vishal.sharma.cs22@university.edu', department: 'Computer Science', riskLevel: 'HIGH RISK', quizScore: 0, quizTime: '', trainingCompleted: false, openedSimulations: [], clickedSimulations: [] },
-  { id: 'stud-2', name: 'Emily Watson', email: 'emily.watson.it23@university.edu', department: 'Information Technology', riskLevel: 'LOW RISK', quizScore: 70, quizTime: '4m 12s', trainingCompleted: true, openedSimulations: ['Library Overdue Fine Alert'], clickedSimulations: ['Library Overdue Fine Alert'] },
-  { id: 'stud-3', name: 'James Smith', email: 'james.smith.ee22@university.edu', department: 'Electronics', riskLevel: 'AWARE', quizScore: 90, quizTime: '2m 45s', trainingCompleted: true, openedSimulations: ['Office 365 Account Expiry'], clickedSimulations: [] },
-  { id: 'stud-4', name: 'Sofia Rodriguez', email: 'sofia.rod.cs23@university.edu', department: 'Computer Science', riskLevel: 'HIGH RISK', quizScore: 0, quizTime: '', trainingCompleted: false, openedSimulations: ['Office 365 Account Expiry'], clickedSimulations: ['Office 365 Account Expiry'] },
-  { id: 'stud-5', name: 'Arthur Dent', email: 'arthur.dent.me22@university.edu', department: 'Mechanical', riskLevel: 'LOW RISK', quizScore: 80, quizTime: '3m 50s', trainingCompleted: true, openedSimulations: ['Exam Schedule Change urgent'], clickedSimulations: ['Exam Schedule Change urgent'] },
-  { id: 'stud-6', name: 'Keanu Reeves', email: 'keanu.r.cs22@university.edu', department: 'Computer Science', riskLevel: 'AWARE', quizScore: 100, quizTime: '1m 55s', trainingCompleted: true, openedSimulations: [], clickedSimulations: [] }
+  { 
+    id: 'stud-1', 
+    name: 'Vishal Sharma', 
+    email: 'vishal.sharma.cs22@university.edu', 
+    department: 'Computer Science', 
+    riskLevel: 'HIGH RISK', 
+    quizScore: 0, 
+    quizTime: '', 
+    trainingCompleted: false, 
+    openedSimulations: [], 
+    clickedSimulations: [] 
+  },
+  { 
+    id: 'stud-2', 
+    name: 'Emily Watson', 
+    email: 'emily.watson.it23@university.edu', 
+    department: 'Information Technology', 
+    riskLevel: 'LOW RISK', 
+    quizScore: 70, 
+    quizTime: '4m 12s', 
+    trainingCompleted: true, 
+    openedSimulations: ['Library Overdue Fine Alert'], 
+    clickedSimulations: ['Library Overdue Fine Alert'] 
+  },
+  { 
+    id: 'stud-3', 
+    name: 'James Smith', 
+    email: 'james.smith.ee22@university.edu', 
+    department: 'Electronics', 
+    riskLevel: 'AWARE', 
+    quizScore: 90, 
+    quizTime: '2m 45s', 
+    trainingCompleted: true, 
+    openedSimulations: ['Office 365 Account Expiry'], 
+    clickedSimulations: [] 
+  },
+  { 
+    id: 'stud-4', 
+    name: 'Sofia Rodriguez', 
+    email: 'sofia.rod.cs23@university.edu', 
+    department: 'Computer Science', 
+    riskLevel: 'HIGH RISK', 
+    quizScore: 0, 
+    quizTime: '', 
+    trainingCompleted: false, 
+    openedSimulations: ['Office 365 Account Expiry'], 
+    clickedSimulations: ['Office 365 Account Expiry'] 
+  },
+  { 
+    id: 'stud-5', 
+    name: 'Arthur Dent', 
+    email: 'arthur.dent.me22@university.edu', 
+    department: 'Mechanical', 
+    riskLevel: 'LOW RISK', 
+    quizScore: 80, 
+    quizTime: '3m 50s', 
+    trainingCompleted: true, 
+    openedSimulations: ['Exam Schedule Change urgent'], 
+    clickedSimulations: ['Exam Schedule Change urgent'] 
+  },
+  { 
+    id: 'stud-6', 
+    name: 'Keanu Reeves', 
+    email: 'keanu.r.cs22@university.edu', 
+    department: 'Computer Science', 
+    riskLevel: 'AWARE', 
+    quizScore: 100, 
+    quizTime: '1m 55s', 
+    trainingCompleted: true, 
+    openedSimulations: [], 
+    clickedSimulations: [] 
+  }
 ];
 
 const INITIAL_CAMPAIGNS = [
-  { name: 'Office 365 Account Expiry', channel: 'Email', sent: 12, opened: 9, clicked: 4, completedTraining: 2, status: 'Active', studentTargets: ['stud-3', 'stud-4'] },
-  { name: 'Library Overdue Fine Alert', channel: 'SMS', sent: 8, opened: 7, clicked: 2, completedTraining: 2, status: 'Completed', studentTargets: ['stud-2'] },
-  { name: 'Exam Schedule Change urgent', channel: 'WhatsApp', sent: 15, opened: 14, clicked: 3, completedTraining: 3, status: 'Completed', studentTargets: ['stud-5'] }
+  { 
+    name: 'Office 365 Account Expiry', 
+    channel: 'Email', 
+    sent: 12, 
+    opened: 9, 
+    clicked: 4, 
+    completedTraining: 2, 
+    status: 'Active', 
+    studentTargets: ['stud-3', 'stud-4'] 
+  },
+  { 
+    name: 'Library Overdue Fine Alert', 
+    channel: 'SMS', 
+    sent: 8, 
+    opened: 7, 
+    clicked: 2, 
+    completedTraining: 2, 
+    status: 'Completed', 
+    studentTargets: ['stud-2'] 
+  },
+  { 
+    name: 'Exam Schedule Change urgent', 
+    channel: 'WhatsApp', 
+    sent: 15, 
+    opened: 14, 
+    clicked: 3, 
+    completedTraining: 3, 
+    status: 'Completed', 
+    studentTargets: ['stud-5'] 
+  }
 ];
 
 const INITIAL_STATS = {
@@ -54,17 +149,17 @@ export default function App() {
   const [view, setView] = useState('landing');
   const [adminTab, setAdminTab] = useState('admin-dashboard');
 
-  // Core Simulation Mock Database States
+  // Core Simulation Database States
   const [students, setStudents] = useState(INITIAL_STUDENTS);
   const [campaigns, setCampaigns] = useState(INITIAL_CAMPAIGNS);
   const [stats, setStats] = useState(INITIAL_STATS);
 
-  // Active user simulation reference (demo tracks student index 0 as target)
-  const targetStudentId = 'stud-1';
-  const targetStudent = students.find(s => s.id === targetStudentId);
+  // Active student logged-in state (defaults to index 0)
+  const [currentStudentId, setCurrentStudentId] = useState('stud-1');
+  const targetStudent = students.find((s) => s.id === currentStudentId) || students[0];
   const [activeCampaign, setActiveCampaign] = useState(null);
 
-  // Success toast alerts
+  // Global Toast Alert State
   const [toast, setToast] = useState(null);
 
   const showToast = (message, duration = 3000) => {
@@ -77,28 +172,50 @@ export default function App() {
     setStudents(INITIAL_STUDENTS);
     setCampaigns(INITIAL_CAMPAIGNS);
     setStats(INITIAL_STATS);
+    setCurrentStudentId('stud-1');
     setActiveCampaign(null);
     setView('landing');
     setAdminTab('admin-dashboard');
     showToast("✓ Simulation memory database reset successfully.");
   };
 
+  // User Login Handler (Student Profile)
+  const handleUserLogin = (user) => {
+    if (!students.some((s) => s.id === user.id)) {
+      setStudents((prev) => [user, ...prev]);
+    }
+    setCurrentStudentId(user.id);
+    showToast(`✓ Welcome back, ${user.name}!`);
+  };
+
+  // User Registration Handler (New Student)
+  const handleUserRegister = (newStudent) => {
+    setStudents((prev) => [newStudent, ...prev]);
+    setCurrentStudentId(newStudent.id);
+    setStats((prev) => ({
+      ...prev,
+      totalUsers: prev.totalUsers + 1,
+      awareUsers: prev.awareUsers + 1
+    }));
+    showToast(`✓ Registration successful! Welcome, ${newStudent.name}!`);
+  };
+
   // Simulation Campaign Creator hook
   const addCampaign = (newCamp, selectedStudentIds) => {
-    setCampaigns(prev => [newCamp, ...prev]);
+    setCampaigns((prev) => [newCamp, ...prev]);
     setActiveCampaign(newCamp);
 
     // Update global counters
     const targetCount = selectedStudentIds.length || students.length;
-    setStats(prev => ({
+    setStats((prev) => ({
       ...prev,
       simulationsSent: prev.simulationsSent + targetCount
     }));
 
     // Update target students opened campaigns in memory
-    const updatedIds = selectedStudentIds.length ? selectedStudentIds : students.map(s => s.id);
-    setStudents(prev => 
-      prev.map(s => {
+    const updatedIds = selectedStudentIds.length ? selectedStudentIds : students.map((s) => s.id);
+    setStudents((prev) => 
+      prev.map((s) => {
         if (updatedIds.includes(s.id)) {
           return {
             ...s,
@@ -114,20 +231,19 @@ export default function App() {
 
   // Trigger from Demo HUD: Deliver Phishing Email notification to student
   const triggerStudentEmail = () => {
+    const campToUse = activeCampaign || INITIAL_CAMPAIGNS[0];
     if (!activeCampaign) {
-      // Auto-set a campaign if none exists
-      setActiveCampaign(INITIAL_CAMPAIGNS[0]);
+      setActiveCampaign(campToUse);
     }
     
     // Simulate target student receives email
-    setStudents(prev => 
-      prev.map(s => {
-        if (s.id === targetStudentId) {
-          const campName = activeCampaign?.name || INITIAL_CAMPAIGNS[0].name;
-          if (!s.openedSimulations.includes(campName)) {
+    setStudents((prev) => 
+      prev.map((s) => {
+        if (s.id === targetStudent.id) {
+          if (!s.openedSimulations.includes(campToUse.name)) {
             return {
               ...s,
-              openedSimulations: [...s.openedSimulations, campName]
+              openedSimulations: [...s.openedSimulations, campToUse.name]
             };
           }
         }
@@ -135,7 +251,7 @@ export default function App() {
       })
     );
 
-    setStats(prev => ({
+    setStats((prev) => ({
       ...prev,
       messagesOpened: prev.messagesOpened + 1
     }));
@@ -146,18 +262,18 @@ export default function App() {
 
   // Force Phishing Link Clicks (Student fails the test)
   const triggerStudentClick = () => {
+    const campToUse = activeCampaign || INITIAL_CAMPAIGNS[0];
     if (!activeCampaign) {
-      setActiveCampaign(INITIAL_CAMPAIGNS[0]);
+      setActiveCampaign(campToUse);
     }
 
-    setStudents(prev => 
-      prev.map(s => {
-        if (s.id === targetStudentId) {
-          const campName = activeCampaign?.name || INITIAL_CAMPAIGNS[0].name;
+    setStudents((prev) => 
+      prev.map((s) => {
+        if (s.id === targetStudent.id) {
           return {
             ...s,
-            openedSimulations: s.openedSimulations.includes(campName) ? s.openedSimulations : [...s.openedSimulations, campName],
-            clickedSimulations: s.clickedSimulations.includes(campName) ? s.clickedSimulations : [...s.clickedSimulations, campName],
+            openedSimulations: s.openedSimulations.includes(campToUse.name) ? s.openedSimulations : [...s.openedSimulations, campToUse.name],
+            clickedSimulations: s.clickedSimulations.includes(campToUse.name) ? s.clickedSimulations : [...s.clickedSimulations, campToUse.name],
             riskLevel: 'HIGH RISK'
           };
         }
@@ -166,7 +282,7 @@ export default function App() {
     );
 
     // Update Click statistics
-    setStats(prev => ({
+    setStats((prev) => ({
       ...prev,
       messagesOpened: prev.messagesOpened + 1,
       linksClicked: prev.linksClicked + 1,
@@ -182,9 +298,9 @@ export default function App() {
   const registerClick = () => {
     const campName = activeCampaign?.name || INITIAL_CAMPAIGNS[0].name;
     
-    setStudents(prev => 
-      prev.map(s => {
-        if (s.id === targetStudentId) {
+    setStudents((prev) => 
+      prev.map((s) => {
+        if (s.id === targetStudent.id) {
           if (!s.clickedSimulations.includes(campName)) {
             return {
               ...s,
@@ -198,8 +314,8 @@ export default function App() {
     );
 
     // Increment clicked count in active campaign
-    setCampaigns(prev => 
-      prev.map(c => {
+    setCampaigns((prev) => 
+      prev.map((c) => {
         if (c.name === campName) {
           return {
             ...c,
@@ -211,7 +327,7 @@ export default function App() {
       })
     );
 
-    setStats(prev => ({
+    setStats((prev) => ({
       ...prev,
       messagesOpened: prev.messagesOpened + 1,
       linksClicked: prev.linksClicked + 1,
@@ -222,9 +338,9 @@ export default function App() {
 
   // Complete Training Course slides
   const completeTraining = () => {
-    setStudents(prev => 
-      prev.map(s => {
-        if (s.id === targetStudentId) {
+    setStudents((prev) => 
+      prev.map((s) => {
+        if (s.id === targetStudent.id) {
           return {
             ...s,
             trainingCompleted: true
@@ -235,8 +351,8 @@ export default function App() {
     );
 
     const campName = activeCampaign?.name || INITIAL_CAMPAIGNS[0].name;
-    setCampaigns(prev => 
-      prev.map(c => {
+    setCampaigns((prev) => 
+      prev.map((c) => {
         if (c.name === campName) {
           return {
             ...c,
@@ -247,19 +363,19 @@ export default function App() {
       })
     );
 
-    setStats(prev => ({
+    setStats((prev) => ({
       ...prev,
       trainingCompleted: prev.trainingCompleted + 1
     }));
 
-    showToast("✓ awareness module finished. Assessment unlocked.");
+    showToast("✓ Awareness module finished. Assessment unlocked.");
   };
 
   // Save student quiz assessment results
   const saveQuizResults = (score, timeTaken) => {
-    setStudents(prev => 
-      prev.map(s => {
-        if (s.id === targetStudentId) {
+    setStudents((prev) => 
+      prev.map((s) => {
+        if (s.id === targetStudent.id) {
           const finalRisk = score >= 80 ? 'AWARE' : 'LOW RISK';
           return {
             ...s,
@@ -273,7 +389,7 @@ export default function App() {
     );
 
     // Update organization stats dynamically
-    setStats(prev => {
+    setStats((prev) => {
       const highChange = prev.highRiskUsers > 0 ? prev.highRiskUsers - 1 : 0;
       const awareChange = score >= 80 ? prev.awareUsers + 1 : prev.awareUsers;
       const lowChange = score < 80 ? prev.lowRiskUsers + 1 : prev.lowRiskUsers;
@@ -291,17 +407,19 @@ export default function App() {
 
   // Target Single Student from dossier list
   const triggerSingleTest = (studentId) => {
-    const targetStud = students.find(s => s.id === studentId);
+    const targetStud = students.find((s) => s.id === studentId);
+    if (!targetStud) return;
+    
+    setCurrentStudentId(studentId);
     showToast(`✉ Simulation bait queue active for target: ${targetStud.name}`);
     
-    // Switch target to this student
-    setStudents(prev => 
-      prev.map(s => {
+    const campName = activeCampaign?.name || INITIAL_CAMPAIGNS[0].name;
+    setStudents((prev) => 
+      prev.map((s) => {
         if (s.id === studentId) {
-          const campName = activeCampaign?.name || INITIAL_CAMPAIGNS[0].name;
           return {
             ...s,
-            openedSimulations: [...s.openedSimulations, campName]
+            openedSimulations: s.openedSimulations.includes(campName) ? s.openedSimulations : [...s.openedSimulations, campName]
           };
         }
         return s;
@@ -314,7 +432,7 @@ export default function App() {
   return (
     <div className="relative min-h-screen text-slate-100 selection:bg-cyan-500 selection:text-black">
       
-      {/* Dynamic Scrolling Cyber Grid & Canvas Particle Background */}
+      {/* Dynamic Background */}
       <CyberGrid />
 
       {/* GLOBAL TOAST ALERTS */}
@@ -335,6 +453,8 @@ export default function App() {
       <DemoController 
         currentView={view} 
         setView={setView} 
+        adminTab={adminTab}
+        setAdminTab={setAdminTab}
         resetDemoData={resetDemoData}
         triggerStudentEmail={triggerStudentEmail}
         triggerStudentClick={triggerStudentClick}
@@ -353,12 +473,24 @@ export default function App() {
 
           {/* 2. ADMIN LOGIN */}
           {view === 'admin-login' && (
-            <motion.div key="login" exit={{ opacity: 0 }} className="flex-1 flex flex-col justify-center">
+            <motion.div key="admin-login" exit={{ opacity: 0 }} className="flex-1 flex flex-col justify-center">
               <AdminLogin setView={setView} />
             </motion.div>
           )}
 
-          {/* 3. ADMIN PORTAL (Dashboard Sidebar Layout wrapper) */}
+          {/* 3. USER AUTH (Login & Registration & Google/LinkedIn) */}
+          {view === 'user-auth' && (
+            <motion.div key="user-auth" exit={{ opacity: 0 }} className="flex-1 flex flex-col justify-center">
+              <UserAuth 
+                setView={setView} 
+                students={students}
+                onLogin={handleUserLogin}
+                onRegister={handleUserRegister}
+              />
+            </motion.div>
+          )}
+
+          {/* 4. ADMIN PORTAL (Dashboard Sidebar Layout wrapper) */}
           {view === 'admin-dashboard' && (
             <motion.div key="admin-dashboard" exit={{ opacity: 0 }} className="w-full h-screen overflow-hidden">
               <AdminDashboard 
@@ -367,7 +499,7 @@ export default function App() {
                 setActiveTab={setAdminTab} 
                 setView={setView}
               >
-                {/* Nested Admin Screen tabs renderers */}
+                {/* Nested Admin Screen Tabs */}
                 {adminTab === 'create-simulation' && (
                   <CreateSimulation 
                     students={students} 
@@ -388,10 +520,22 @@ export default function App() {
                     triggerSingleTest={triggerSingleTest} 
                   />
                 )}
+                {adminTab === 'training' && (
+                  <TrainingConsole 
+                    stats={stats} 
+                    setView={setView} 
+                  />
+                )}
+                {adminTab === 'quiz-results' && (
+                  <QuizResultsAdmin 
+                    students={students} 
+                  />
+                )}
                 {adminTab === 'risk-analysis' && (
                   <RiskAnalysis 
                     students={students} 
                     stats={stats} 
+                    triggerSingleTest={triggerSingleTest}
                   />
                 )}
                 {adminTab === 'reports' && (
@@ -400,111 +544,10 @@ export default function App() {
                     campaigns={campaigns} 
                   />
                 )}
-                {/* 4. Settings tab */}
                 {adminTab === 'settings' && (
-                  <div className="space-y-6 font-mono text-xs animate-fade-in">
-                    <div>
-                      <h1 className="text-2xl font-bold font-sans text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Settings & Rules Configuration</h1>
-                      <p className="text-xs text-slate-400 mt-1 uppercase">Aegis security administration properties</p>
-                    </div>
-                    <div className="glass-panel border-slate-800 p-6 rounded-xl space-y-4 max-w-xl">
-                      <div className="flex items-center justify-between border-b border-slate-900 pb-3">
-                        <div>
-                          <p className="font-bold text-slate-200">Force HTTPS Encryption</p>
-                          <p className="text-[10px] text-slate-500">Secure link sandbox redirection requirements</p>
-                        </div>
-                        <input type="checkbox" defaultChecked className="w-4 h-4 cursor-pointer accent-cyan-500" />
-                      </div>
-                      <div className="flex items-center justify-between border-b border-slate-900 pb-3">
-                        <div>
-                          <p className="font-bold text-slate-200">Include Fake SSL Warnings</p>
-                          <p className="text-[10px] text-slate-500">Attach warning padlocks in SMS templates</p>
-                        </div>
-                        <input type="checkbox" defaultChecked className="w-4 h-4 cursor-pointer accent-cyan-500" />
-                      </div>
-                      <div className="flex items-center justify-between border-b border-slate-900 pb-3">
-                        <div>
-                          <p className="font-bold text-slate-200">Remedial Enrollment Auto-trigger</p>
-                          <p className="text-[10px] text-slate-500">Auto enroll clicked users to training slides</p>
-                        </div>
-                        <input type="checkbox" defaultChecked className="w-4 h-4 cursor-pointer accent-cyan-500" />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="font-bold text-slate-200">College Demo Heuristics</p>
-                          <p className="text-[10px] text-slate-500">Maintain simulation records only in local memory state</p>
-                        </div>
-                        <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold uppercase text-[9px]">LOCAL_ACTIVE</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {/* 5. Training Admin Overview */}
-                {adminTab === 'training' && (
-                  <div className="space-y-6 font-mono text-xs animate-fade-in">
-                    <div>
-                      <h1 className="text-2xl font-bold font-sans text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Training Courses Console</h1>
-                      <p className="text-xs text-slate-400 mt-1 uppercase">Remedial course completion stats and assignments</p>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="glass-panel border-slate-800 p-5 rounded-xl space-y-4">
-                        <h3 className="text-sm font-bold text-cyan-400 uppercase">Available Courses</h3>
-                        <div className="space-y-3">
-                          {[
-                            { name: "Phishing Fundamentals Course", modules: "6 units", completed: stats.trainingCompleted, enrolled: stats.linksClicked, icon: <BookOpen size={16} /> }
-                          ].map((c, i) => (
-                            <div key={i} className="p-3 bg-slate-900/40 border border-slate-850 rounded-lg flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                <div className="p-2 bg-slate-950 border border-slate-800 text-purple-400 rounded">{c.icon}</div>
-                                <div>
-                                  <p className="font-bold text-slate-200">{c.name}</p>
-                                  <p className="text-[10px] text-slate-500">{c.modules} • {c.enrolled} enrolled</p>
-                                </div>
-                              </div>
-                              <span className="font-bold text-cyan-400">{c.completed} passed</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {/* 6. Quiz Results Admin Overview */}
-                {adminTab === 'quiz-results' && (
-                  <div className="space-y-6 font-mono text-xs animate-fade-in">
-                    <div>
-                      <h1 className="text-2xl font-bold font-sans text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Quiz Roster Results</h1>
-                      <p className="text-xs text-slate-400 mt-1 uppercase">comprehensive overview of student quiz completions</p>
-                    </div>
-                    <div className="glass-panel border-slate-800 rounded-xl overflow-hidden shadow-cyber-inset">
-                      <table className="w-full text-left">
-                        <thead className="bg-slate-900 text-slate-500 uppercase text-[9px] border-b border-slate-900">
-                          <tr>
-                            <th className="p-3">Student</th>
-                            <th className="p-3">Department</th>
-                            <th className="p-3 text-center">Score</th>
-                            <th className="p-3 text-center">Elapsed Time</th>
-                            <th className="p-3">Status</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-900 bg-slate-950/20">
-                          {students.filter(s => s.quizScore > 0).map((s, idx) => (
-                            <tr key={idx} className="hover:bg-slate-900/10">
-                              <td className="p-3 font-sans font-bold text-slate-200">{s.name}</td>
-                              <td className="p-3 text-slate-400">{s.department}</td>
-                              <td className="p-3 text-center font-bold text-emerald-400">{s.quizScore}%</td>
-                              <td className="p-3 text-center text-slate-400">{s.quizTime}</td>
-                              <td className="p-3">
-                                <span className="px-2 py-0.5 rounded text-[8px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold">
-                                  PASSED
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
+                  <SettingsPage 
+                    resetDemoData={resetDemoData} 
+                  />
                 )}
               </AdminDashboard>
             </motion.div>
@@ -514,7 +557,7 @@ export default function App() {
                STUDENT PERSPECTIVE VIEWS
           ======================================================= */}
           
-          {/* 7. USER DASHBOARD (Student Portal Cockpit) */}
+          {/* 5. USER DASHBOARD (Student Portal Cockpit) */}
           {view === 'student-dashboard' && (
             <motion.div key="student-dashboard" exit={{ opacity: 0 }} className="flex-1 w-full bg-slate-950/40 min-h-screen">
               <UserDashboard 
@@ -524,7 +567,7 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* 8. SIMULATED PHISHING INBOX */}
+          {/* 6. SIMULATED PHISHING INBOX */}
           {view === 'student-email-inbox' && (
             <motion.div key="inbox" exit={{ opacity: 0 }} className="flex-1 w-full flex items-center justify-center min-h-screen">
               <SimulationExperience 
@@ -536,7 +579,7 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* 9. PHISHING ALREADY CLICKED RED WARNING PAGE */}
+          {/* 7. PHISHING ALREADY CLICKED RED WARNING PAGE */}
           {view === 'phishing-alert' && (
             <motion.div key="alert" exit={{ opacity: 0 }} className="flex-1 w-full flex items-center justify-center min-h-screen py-10">
               <SimulationExperience 
@@ -548,7 +591,7 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* 10. AWARENESS TRAINING PLAYER */}
+          {/* 8. AWARENESS TRAINING PLAYER */}
           {view === 'awareness-training' && (
             <motion.div key="training" exit={{ opacity: 0 }} className="flex-1 w-full flex items-center justify-center min-h-screen">
               <AwarenessTraining 
@@ -559,7 +602,7 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* 11. CYBER ASSESSMENT QUIZ */}
+          {/* 9. CYBER ASSESSMENT QUIZ */}
           {view === 'quiz' && (
             <motion.div key="quiz" exit={{ opacity: 0 }} className="flex-1 w-full flex items-center justify-center min-h-screen">
               <QuizPage 
@@ -569,7 +612,7 @@ export default function App() {
             </motion.div>
           )}
 
-          {/* 12. QUIZ RESULT SCREEN */}
+          {/* 10. QUIZ RESULT SCREEN */}
           {view === 'quiz-result' && (
             <motion.div key="quiz-result" exit={{ opacity: 0 }} className="flex-1 w-full flex items-center justify-center min-h-screen">
               <QuizResult 

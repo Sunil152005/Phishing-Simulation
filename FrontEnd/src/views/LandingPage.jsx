@@ -92,10 +92,10 @@ export default function LandingPage({ setView }) {
               </button>
               
               <button
-                onClick={() => setView('student-dashboard')}
-                className="w-full sm:w-auto px-8 py-3.5 glass-panel border-purple-500/40 hover:border-purple-400 text-purple-300 hover:text-purple-200 uppercase tracking-wider rounded-lg shadow-cyber-inset hover:shadow-glow-secondary transform hover:-translate-y-0.5 transition-all text-sm cursor-pointer"
+                onClick={() => setView('user-auth')}
+                className="w-full sm:w-auto px-8 py-3.5 glass-panel border-purple-500/40 hover:border-purple-400 text-purple-300 hover:text-purple-200 uppercase tracking-wider rounded-lg shadow-cyber-inset hover:shadow-glow-secondary transform hover:-translate-y-0.5 transition-all text-sm cursor-pointer flex items-center justify-center gap-2"
               >
-                User Login
+                User Login / Register
               </button>
             </div>
           </motion.div>
